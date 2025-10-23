@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"golang-weekly/internal/menu"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -19,27 +21,35 @@ func main() {
 		fmt.Printf("\x1bc")
 		fmt.Print("--- Welcome to Mixue ---\n\n")
 
-		fmt.Println("1. Select Menu")
-		fmt.Println("2. Cart")
-		fmt.Println("3. History")
-
+		for _, menu := range menu.MenuHomes {
+			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
+		}
 		fmt.Print("\n0. exit\n\n")
 
 		fmt.Print("Choose a menu: ")
 		input, _ := reader.ReadString('\n')
-		menu := strings.TrimSpace(input)
+		choice := strings.TrimSpace(input)
 
-		switch menu {
-		case "1":
-			fmt.Print("1")
-		case "2":
-			fmt.Print("2")
-		case "3":
-			fmt.Print("3")
-		case "0":
+		if choice == "0" {
 			loop = false
-		default:
-			fmt.Print("Invalid menu option, press enter to continue...")
+			continue
+		}
+
+		found := false
+		for _, menu := range menu.MenuHomes {
+			if strconv.Itoa(menu.ID) == choice {
+				if menu.Action != nil {
+					menu.Action()
+				} else {
+					fmt.Println("Menu action not implemented yet.")
+				}
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			fmt.Println("Invalid menu option, press enter to continue...")
 			scanner.Scan()
 		}
 	}
