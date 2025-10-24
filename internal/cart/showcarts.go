@@ -24,9 +24,9 @@ func ShowCarts() {
 			loop = false
 		} else {
 			total := 0.0
-			for _, item := range Carts {
+			for i, item := range Carts {
 				subtotal := float64(item.Quantity) * item.Price
-				fmt.Println(item.Name, "- Quantity:", item.Quantity, "- Subtotal: Rp", subtotal)
+				fmt.Printf("%d. %s - Quantity: %d - Subtotal: Rp %.2f\n", i+1, item.Name, item.Quantity, subtotal)
 				total += subtotal
 			}
 
@@ -37,7 +37,7 @@ func ShowCarts() {
 				fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
 			}
 
-			fmt.Print("\n0. exit\n\n")
+			fmt.Print("\n0. exit\n")
 
 			fmt.Print("\nChoose a menu: ")
 
