@@ -28,7 +28,7 @@ func SelectMenu() {
 		choiceStr = strings.TrimSpace(choiceStr)
 		choice, err := strconv.Atoi(choiceStr)
 		if err != nil {
-			fmt.Print("Invalid input, please enter a number...")
+			fmt.Print("Invalid input, please enter a number... ")
 			scanner.Scan()
 			continue
 		}
@@ -41,7 +41,7 @@ func SelectMenu() {
 		found := false
 		for _, item := range Menus {
 			if item.ID == choice {
-				fmt.Println("You selected:", item.Name)
+				fmt.Println("\nYou selected:", item.Name)
 				found = true
 				itemExists := false
 				for i := range cart.Carts {
@@ -65,12 +65,12 @@ func SelectMenu() {
 		}
 
 		if !found {
-			fmt.Print("Menu item not found, please try again...")
+			fmt.Print("Menu item not found, please try again... ")
 			scanner.Scan()
 			continue
 		}
 
-		fmt.Print("\nPress Enter to continue...")
+		fmt.Print("\nPress Enter to continue... ")
 		scanner.Scan()
 	}
 }
