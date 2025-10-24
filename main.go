@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"golang-weekly/internal/cart"
 	"golang-weekly/internal/data_menu"
+	"golang-weekly/internal/history"
 	"golang-weekly/internal/menu"
 	"os"
 	"strconv"
@@ -14,7 +15,7 @@ import (
 var HomeMenus = []data_menu.MenusPage{
 	{ID: 1, Menu: "Select Menu", Action: menu.SelectMenu},
 	{ID: 2, Menu: "Cart", Action: cart.ShowCarts},
-	{ID: 3, Menu: "History", Action: nil},
+	{ID: 3, Menu: "History", Action: history.ShowHistories},
 }
 
 func main() {
