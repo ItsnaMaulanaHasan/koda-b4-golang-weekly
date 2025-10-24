@@ -27,21 +27,30 @@ func main() {
 		fmt.Print("\n0. exit\n\n")
 
 		fmt.Print("Choose a menu: ")
-		input, _ := reader.ReadString('\n')
-		choice := strings.TrimSpace(input)
 
-		if choice == "0" {
-			loop = false
+		input, _ := reader.ReadString('\n')
+		choiceStr := strings.TrimSpace(input)
+		choice, err := strconv.Atoi(choiceStr)
+
+		if err != nil {
+			fmt.Print("Invalid input, please enter a number...")
+			scanner.Scan()
 			continue
+		}
+
+		if choice == 0 {
+			loop = false
+			break
 		}
 
 		found := false
 		for _, menu := range menu.MenuHomes {
-			if strconv.Itoa(menu.ID) == choice {
+			if menu.ID == choice {
 				if menu.Action != nil {
 					menu.Action()
 				} else {
-					fmt.Println("Menu action not implemented yet.")
+					fmt.Print("Menu action not implemented yet...")
+					scanner.Scan()
 				}
 				found = true
 				break
@@ -49,7 +58,7 @@ func main() {
 		}
 
 		if !found {
-			fmt.Println("Invalid menu option, press enter to continue...")
+			fmt.Print("Invalid menu option, press enter to continue...")
 			scanner.Scan()
 		}
 	}
