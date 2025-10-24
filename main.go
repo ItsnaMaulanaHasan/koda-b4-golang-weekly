@@ -3,11 +3,19 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"golang-weekly/internal/cart"
+	"golang-weekly/internal/datamenu"
 	"golang-weekly/internal/menu"
 	"os"
 	"strconv"
 	"strings"
 )
+
+var HomeMenus = []datamenu.MenusPage{
+	{ID: 1, Menu: "Select Menu", Action: menu.SelectMenu},
+	{ID: 2, Menu: "Cart", Action: cart.ShowCarts},
+	{ID: 3, Menu: "History", Action: nil},
+}
 
 func main() {
 	defer func() {
@@ -21,7 +29,7 @@ func main() {
 		fmt.Printf("\x1bc")
 		fmt.Print("--- Welcome to Mixue ---\n\n")
 
-		for _, menu := range menu.MenuHomes {
+		for _, menu := range HomeMenus {
 			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
 		}
 		fmt.Print("\n0. exit\n\n")
@@ -44,7 +52,7 @@ func main() {
 		}
 
 		found := false
-		for _, menu := range menu.MenuHomes {
+		for _, menu := range HomeMenus {
 			if menu.ID == choice {
 				if menu.Action != nil {
 					menu.Action()

@@ -1,12 +1,14 @@
 package cart
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func ShowCart() {
+func ShowCarts() {
 	loop := true
 	for loop {
 		fmt.Println("\x1bc")
-		println("--- Your Cart ---\n")
+		fmt.Print("--- Your Cart ---\n")
 
 		if len(Carts) == 0 {
 			fmt.Println("Your cart is empty.")
@@ -18,6 +20,10 @@ func ShowCart() {
 				total += subtotal
 			}
 			fmt.Println("\nTotal: Rp", total)
+		}
+
+		for _, menu := range CartMenus {
+			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
 		}
 
 		fmt.Print("\nPress 0 to go back to the main menu ")
