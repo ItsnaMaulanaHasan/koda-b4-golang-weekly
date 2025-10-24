@@ -3,6 +3,7 @@ package cart
 import (
 	"bufio"
 	"fmt"
+	"golang-weekly/internal/models"
 	"os"
 	"strings"
 )
@@ -17,7 +18,8 @@ func CheckoutCart() {
 		choiceStr, _ := reader.ReadString('\n')
 		choiceStr = strings.TrimSpace(choiceStr)
 		if strings.ToLower(choiceStr) == "y" {
-			Carts = []CartItem{}
+			CreateInvoice(models.Carts)
+			models.Carts = []models.CartItem{}
 			fmt.Print("Checkout successful! Press enter to continue... ")
 			scanner.Scan()
 			loop = false
