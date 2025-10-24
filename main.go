@@ -4,14 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/cart"
-	"golang-weekly/internal/datamenu"
+	"golang-weekly/internal/data_menu"
 	"golang-weekly/internal/menu"
 	"os"
 	"strconv"
 	"strings"
 )
 
-var HomeMenus = []datamenu.MenusPage{
+var HomeMenus = []data_menu.MenusPage{
 	{ID: 1, Menu: "Select Menu", Action: menu.SelectMenu},
 	{ID: 2, Menu: "Cart", Action: cart.ShowCarts},
 	{ID: 3, Menu: "History", Action: nil},

@@ -1,6 +1,6 @@
 package cart
 
-import "golang-weekly/internal/datamenu"
+import "golang-weekly/internal/data_menu"
 
 type CartItem struct {
 	ID       int
@@ -11,7 +11,7 @@ type CartItem struct {
 
 var Carts []CartItem
 
-var CartMenus = []datamenu.MenusPage{
+var CartMenus = []data_menu.MenusPage{
 	{ID: 1, Menu: "Checkout", Action: CheckoutCart},
 	{ID: 2, Menu: "Edit Cart", Action: EditCart},
 	{ID: 3, Menu: "Clear Cart", Action: ClearCart},

@@ -1,4 +1,4 @@
-package datamenu
+package data_menu
 
 type MenuItem struct {
 	ID    int

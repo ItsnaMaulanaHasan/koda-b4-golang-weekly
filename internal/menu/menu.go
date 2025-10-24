@@ -1,10 +1,8 @@
 package menu
 
-import (
-	"golang-weekly/internal/datamenu"
-)
+import "golang-weekly/internal/data_menu"
 
-var Menus = []datamenu.MenuItem{
+var Menus = []data_menu.MenuItem{
 	{ID: 1, Name: "Mixue Ice Cream", Price: 8000},
 	{ID: 2, Name: "BOBA Sundae", Price: 16000},
 	{ID: 3, Name: "Strawberry Mi-Shake", Price: 16000},
