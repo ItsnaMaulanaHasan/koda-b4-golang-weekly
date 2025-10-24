@@ -13,6 +13,6 @@ var Carts []CartItem
 
 var CartMenus = []datamenu.MenusPage{
 	{ID: 1, Menu: "Checkout", Action: CheckoutCart},
-	{ID: 2, Menu: "Edit Cart", Action: nil},
+	{ID: 2, Menu: "Edit Cart", Action: EditCart},
 	{ID: 3, Menu: "Clear Cart", Action: ClearCart},
 }
