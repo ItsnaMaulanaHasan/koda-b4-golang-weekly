@@ -1,8 +1,33 @@
-package menu
+package models
 
-import "golang-weekly/internal/data_menu"
+type MenuItem struct {
+	ID    int
+	Name  string
+	Price float64
+}
 
-var Menus = []data_menu.MenuItem{
+type MenusPage struct {
+	ID     int
+	Menu   string
+	Action func()
+}
+
+type CartItem struct {
+	ID       int
+	Name     string
+	Quantity int
+	Price    float64
+}
+
+type History struct {
+	ID        int
+	Date      string
+	NoInvoice string
+	ListMenu  []CartItem
+	Total     float64
+}
+
+var Menus = []MenuItem{
 	{ID: 1, Name: "Mixue Ice Cream", Price: 8000},
 	{ID: 2, Name: "BOBA Sundae", Price: 16000},
 	{ID: 3, Name: "Strawberry Mi-Shake", Price: 16000},
@@ -18,3 +43,7 @@ var Menus = []data_menu.MenuItem{
 	{ID: 13, Name: "Original Jasmine Tea", Price: 10000},
 	{ID: 14, Name: "Original Earl Grey Tea", Price: 10000},
 }
+
+var Carts []CartItem
+
+var Histories = []History{}

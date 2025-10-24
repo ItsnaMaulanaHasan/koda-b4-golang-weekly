@@ -3,7 +3,7 @@ package menu
 import (
 	"bufio"
 	"fmt"
-	"golang-weekly/internal/cart"
+	"golang-weekly/internal/models"
 	"os"
 	"strconv"
 	"strings"
@@ -17,7 +17,7 @@ func SelectMenu() {
 		fmt.Printf("\x1bc")
 		fmt.Print("--- Select Menu ---\n\n")
 
-		for _, item := range Menus {
+		for _, item := range models.Menus {
 			fmt.Printf("%d. %s - Rp %.2f\n", item.ID, item.Name, item.Price)
 		}
 		fmt.Print("\n0. exit\n\n")
@@ -39,21 +39,21 @@ func SelectMenu() {
 		}
 
 		found := false
-		for _, item := range Menus {
+		for _, item := range models.Menus {
 			if item.ID == choice {
 				fmt.Println("\nYou selected:", item.Name)
 				found = true
 				itemExists := false
-				for i := range cart.Carts {
-					if cart.Carts[i].ID == item.ID {
-						cart.Carts[i].Quantity++
+				for i := range models.Carts {
+					if models.Carts[i].ID == item.ID {
+						models.Carts[i].Quantity++
 						itemExists = true
 						break
 					}
 				}
 
 				if !itemExists {
-					cart.Carts = append(cart.Carts, cart.CartItem{
+					models.Carts = append(models.Carts, models.CartItem{
 						ID:       item.ID,
 						Name:     item.Name,
 						Quantity: 1,

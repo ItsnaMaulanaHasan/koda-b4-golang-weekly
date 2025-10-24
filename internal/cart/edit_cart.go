@@ -3,6 +3,7 @@ package cart
 import (
 	"bufio"
 	"fmt"
+	"golang-weekly/internal/models"
 	"os"
 	"strconv"
 	"strings"
@@ -16,7 +17,7 @@ func EditCart() {
 		fmt.Println("\x1bc")
 		fmt.Print("--- Your Cart ---\n\n")
 		total := 0.0
-		for i, item := range Carts {
+		for i, item := range models.Carts {
 			subtotal := float64(item.Quantity) * item.Price
 			fmt.Printf("%d. %s - Quantity: %d - Subtotal: Rp %.2f\n", i+1, item.Name, item.Quantity, subtotal)
 			total += subtotal
@@ -44,7 +45,7 @@ func EditCart() {
 		}
 
 		found := false
-		for i, item := range Carts {
+		for i, item := range models.Carts {
 			if item.ID == choice {
 				fmt.Printf("Enter new quantity for %s: ", item.Name)
 				quantityStr, _ := reader.ReadString('\n')
@@ -53,10 +54,10 @@ func EditCart() {
 				if err != nil || quantity < 0 {
 					fmt.Print("Invalid quantity, please enter a valid number... ")
 				} else if quantity == 0 {
-					Carts = append(Carts[:i], Carts[i+1:]...)
+					models.Carts = append(models.Carts[:i], models.Carts[i+1:]...)
 					fmt.Printf("%s removed from cart. Press enter to continue... ", item.Name)
 				} else {
-					Carts[i].Quantity = quantity
+					models.Carts[i].Quantity = quantity
 					fmt.Printf("Quantity for %s updated to %d. Press enter to continue... ", item.Name, quantity)
 				}
 				scanner.Scan()

@@ -3,6 +3,7 @@ package cart
 import (
 	"bufio"
 	"fmt"
+	"golang-weekly/internal/models"
 	"os"
 	"strings"
 )
@@ -17,7 +18,7 @@ func ClearCart() {
 		choiceStr, _ := reader.ReadString('\n')
 		choiceStr = strings.TrimSpace(choiceStr)
 		if strings.ToLower(choiceStr) == "y" {
-			Carts = []CartItem{}
+			models.Carts = []models.CartItem{}
 			fmt.Print("Carts successfully cleared! Press enter to continue... ")
 			scanner.Scan()
 			loop = false

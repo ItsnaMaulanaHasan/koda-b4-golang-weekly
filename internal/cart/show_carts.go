@@ -3,10 +3,17 @@ package cart
 import (
 	"bufio"
 	"fmt"
+	"golang-weekly/internal/models"
 	"os"
 	"strconv"
 	"strings"
 )
+
+var CartMenus = []models.MenusPage{
+	{ID: 1, Menu: "Checkout", Action: CheckoutCart},
+	{ID: 2, Menu: "Edit Cart", Action: EditCart},
+	{ID: 3, Menu: "Clear Cart", Action: ClearCart},
+}
 
 func ShowCarts() {
 	loop := true
@@ -16,7 +23,7 @@ func ShowCarts() {
 		fmt.Println("\x1bc")
 		fmt.Print("--- Your Carts ---\n\n")
 
-		if len(Carts) == 0 {
+		if len(models.Carts) == 0 {
 			fmt.Print("Your cart is empty.\n\n")
 			fmt.Print("-----------------\n\n")
 			fmt.Print("Enter to go back to the main menu... ")
@@ -26,7 +33,7 @@ func ShowCarts() {
 		}
 
 		total := 0.0
-		for i, item := range Carts {
+		for i, item := range models.Carts {
 			subtotal := float64(item.Quantity) * item.Price
 			fmt.Printf("%d. %s - Quantity: %d - Subtotal: Rp %.2f\n", i+1, item.Name, item.Quantity, subtotal)
 			total += subtotal
