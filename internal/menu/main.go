@@ -12,6 +12,7 @@ import (
 func SelectMenu() {
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
+	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		fmt.Printf("\x1bc")
 		fmt.Print("--- Select Menu ---\n\n")
@@ -23,22 +24,18 @@ func SelectMenu() {
 
 		fmt.Print("\nChoose a menu: ")
 
-		choiceStr, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Println("Invalid input, please enter a number.")
-			continue
-		}
-
+		choiceStr, _ := reader.ReadString('\n')
 		choiceStr = strings.TrimSpace(choiceStr)
 		choice, err := strconv.Atoi(choiceStr)
 		if err != nil {
-			fmt.Println("Invalid input, please enter a number.")
+			fmt.Print("Invalid input, please enter a number...")
+			scanner.Scan()
 			continue
 		}
 
 		if choice == 0 {
 			loop = false
-			continue
+			break
 		}
 
 		found := false
@@ -68,10 +65,12 @@ func SelectMenu() {
 		}
 
 		if !found {
-			fmt.Println("Menu item not found, please try again.")
+			fmt.Print("Menu item not found, please try again...")
+			scanner.Scan()
+			continue
 		}
 
 		fmt.Print("\nPress Enter to continue...")
-		fmt.Scanln()
+		scanner.Scan()
 	}
 }
