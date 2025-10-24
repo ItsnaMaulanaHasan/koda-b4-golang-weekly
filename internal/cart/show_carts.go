@@ -14,7 +14,7 @@ func ShowCarts() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		fmt.Println("\x1bc")
-		fmt.Print("--- Your Cart ---\n\n")
+		fmt.Print("--- Your Carts ---\n\n")
 
 		if len(Carts) == 0 {
 			fmt.Print("Your cart is empty.\n\n")
@@ -22,58 +22,60 @@ func ShowCarts() {
 			fmt.Print("Enter to go back to the main menu... ")
 			scanner.Scan()
 			loop = false
-		} else {
-			total := 0.0
-			for i, item := range Carts {
-				subtotal := float64(item.Quantity) * item.Price
-				fmt.Printf("%d. %s - Quantity: %d - Subtotal: Rp %.2f\n", i+1, item.Name, item.Quantity, subtotal)
-				total += subtotal
-			}
+			continue
+		}
 
-			fmt.Println("\nTotal: Rp", total)
-			fmt.Print("\n-----------------\n\n")
+		total := 0.0
+		for i, item := range Carts {
+			subtotal := float64(item.Quantity) * item.Price
+			fmt.Printf("%d. %s - Quantity: %d - Subtotal: Rp %.2f\n", i+1, item.Name, item.Quantity, subtotal)
+			total += subtotal
+		}
 
-			for _, menu := range CartMenus {
-				fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
-			}
+		fmt.Println("\nTotal: Rp", total)
+		fmt.Print("\n-----------------\n\n")
 
-			fmt.Print("\n0. exit\n")
+		for _, menu := range CartMenus {
+			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
+		}
 
-			fmt.Print("\nChoose a menu: ")
+		fmt.Print("\n0. exit\n")
 
-			choiceStr, _ := reader.ReadString('\n')
-			choiceStr = strings.TrimSpace(choiceStr)
-			choice, err := strconv.Atoi(choiceStr)
+		fmt.Print("\nChoose a menu: ")
 
-			if err != nil {
-				fmt.Print("Invalid input, please enter a number... ")
-				scanner.Scan()
-				continue
-			}
+		choiceStr, _ := reader.ReadString('\n')
+		choiceStr = strings.TrimSpace(choiceStr)
+		choice, err := strconv.Atoi(choiceStr)
 
-			if choice == 0 {
-				loop = false
+		if err != nil {
+			fmt.Print("Invalid input, please enter a number... ")
+			scanner.Scan()
+			continue
+		}
+
+		if choice == 0 {
+			loop = false
+			break
+		}
+
+		found := false
+		for _, menu := range CartMenus {
+			if menu.ID == choice {
+				if menu.Action != nil {
+					menu.Action()
+				} else {
+					fmt.Print("Menu action not implemented yet...")
+					scanner.Scan()
+				}
+				found = true
 				break
 			}
-
-			found := false
-			for _, menu := range CartMenus {
-				if menu.ID == choice {
-					if menu.Action != nil {
-						menu.Action()
-					} else {
-						fmt.Print("Menu action not implemented yet...")
-						scanner.Scan()
-					}
-					found = true
-					break
-				}
-			}
-
-			if !found {
-				fmt.Print("Invalid menu option, press enter to continue...")
-				scanner.Scan()
-			}
 		}
+
+		if !found {
+			fmt.Print("Invalid menu option, press enter to continue...")
+			scanner.Scan()
+		}
+
 	}
 }
