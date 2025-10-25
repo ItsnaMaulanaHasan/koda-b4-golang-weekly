@@ -42,13 +42,12 @@ func CartsPage() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		fmt.Println("\x1bc")
-
 		fmt.Print("----------------- Your Carts -----------------------\n\n")
 
 		if len(models.Carts) == 0 {
 			fmt.Print("Your carts is empty.\n\n")
-			fmt.Print("-------------------------------------------------\n\n")
-			fmt.Print("Enter to go back to the main menu... ")
+			fmt.Print("----------------------------------------------------\n\n")
+			fmt.Print("Press enter to go back to the main menu... ")
 			scanner.Scan()
 			loop = false
 			continue
