@@ -31,9 +31,7 @@ func SelectMenu() {
 			fmt.Fprintln(w, "No\tName\tPrice")
 			fmt.Fprintln(w, "---\t----------------------------\t------------")
 
-			for _, item := range models.Menus {
-				fmt.Fprintf(w, "%d\t%s\tRp.%.2f\n", item.ID, item.Name, item.Price)
-			}
+			models.PrintRows(models.MenuMixue, w)
 
 			w.Flush()
 
@@ -55,7 +53,7 @@ func SelectMenu() {
 			}
 
 			found := false
-			for _, item := range models.Menus {
+			for _, item := range models.MenuMixue.ListMenu {
 				if item.ID == choice {
 					fmt.Println("\nYou selected:", item.Name)
 					found = true
