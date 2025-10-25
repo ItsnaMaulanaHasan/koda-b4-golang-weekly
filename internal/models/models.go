@@ -56,13 +56,25 @@ type History struct {
 	Total     float64
 }
 
+type Histories struct {
+	ListHistory []History
+}
+
+func (history Histories) PrintOut() []string {
+	var results []string
+	for i, item := range history.ListHistory {
+		results = append(results, fmt.Sprintf("%d\t%s\t%s\tRp.%.2f\n", i+1, item.Date, item.NoInvoice, item.Total))
+	}
+	return results
+}
+
 type Printable interface {
 	PrintOut() []string
 }
 
 func PrintRows(p Printable, w *tabwriter.Writer) {
-	for _, line := range p.PrintOut() {
-		fmt.Fprint(w, line)
+	for _, row := range p.PrintOut() {
+		fmt.Fprint(w, row)
 	}
 }
 
@@ -85,4 +97,4 @@ var MenuMixue = Menus{ListMenu: []MenuItem{
 
 var CartOrders = Carts{}
 
-var Histories = []History{}
+var HistoryOrders = Histories{}

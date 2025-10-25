@@ -26,7 +26,7 @@ func ShowHistories() {
 			fmt.Println("\x1bc")
 			fmt.Print("--------------- Your Histories ---------------\n\n")
 
-			if len(models.Histories) == 0 {
+			if len(models.HistoryOrders.ListHistory) == 0 {
 				fmt.Print("Your histories is empty.\n\n")
 				fmt.Print("----------------------------------------------\n\n")
 				fmt.Print("Press Enter to go back to the main menu... ")
@@ -38,12 +38,11 @@ func ShowHistories() {
 			w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
 
 			fmt.Println("----------------------------------------------")
-			fmt.Fprintln(w, "No\tNo. Invoice\tDate\tTotal")
-			fmt.Fprintln(w, "---\t----------------\t--------\t-------------")
+			fmt.Fprintln(w, "No\tDate\tNo. Invoice\tTotal")
+			fmt.Fprintln(w, "---\t----------\t--------------\t-------------")
 
-			for i, history := range models.Histories {
-				fmt.Fprintf(w, "%d\t%s\t%s\tRp.%.2f\n", i+1, history.NoInvoice, history.Date, history.Total)
-			}
+			models.PrintRows(models.HistoryOrders, w)
+
 			w.Flush()
 
 			fmt.Print("----------------------------------------------\n\n")
@@ -63,7 +62,7 @@ func ShowHistories() {
 				return
 			}
 
-			if choice < 0 || choice > len(models.Histories) {
+			if choice < 0 || choice > len(models.HistoryOrders.ListHistory) {
 				panic("History not found!")
 			} else {
 				DetailsHistory(choice - 1)
