@@ -10,7 +10,7 @@ import (
 func DetailsHistory(index int) {
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Println("\x1bc")
-	history := models.Histories[index]
+	history := models.HistoryOrders.ListHistory[index]
 	fmt.Println("--- History Details ---")
 	fmt.Println("Date:", history.Date)
 	fmt.Println("No Invoice:", history.NoInvoice)

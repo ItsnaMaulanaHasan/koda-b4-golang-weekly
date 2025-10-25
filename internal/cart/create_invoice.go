@@ -21,9 +21,9 @@ func CreateInvoice(menuItems []models.CartItem) {
 	invoice := fmt.Sprintf("INV-MIXUE-%v", ID)
 
 	dateNow := time.Now()
-	dateStr := dateNow.Format("20060102")
+	dateStr := dateNow.Format("01-02-2006")
 
-	models.Histories = append(models.Histories, models.History{
+	models.HistoryOrders.ListHistory = append(models.HistoryOrders.ListHistory, models.History{
 		ID:        ID,
 		Date:      dateStr,
 		NoInvoice: invoice,
