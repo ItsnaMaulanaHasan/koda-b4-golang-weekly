@@ -43,7 +43,7 @@ func EditCart() {
 			}
 
 			found := false
-			for i, item := range models.Carts {
+			for i, item := range models.CartOrders.ListCart {
 				if item.ID == choice {
 					fmt.Printf("Enter new quantity for %s: ", item.Name)
 					quantityStr, _ := reader.ReadString('\n')
@@ -52,10 +52,10 @@ func EditCart() {
 					if err != nil || quantity < 0 {
 						panic("Invalid quantity, please enter a valid number... ")
 					} else if quantity == 0 {
-						models.Carts = append(models.Carts[:i], models.Carts[i+1:]...)
+						models.CartOrders.ListCart = append(models.CartOrders.ListCart[:i], models.CartOrders.ListCart[i+1:]...)
 						fmt.Printf("%s removed from cart. Press enter to continue... ", item.Name)
 					} else {
-						models.Carts[i].Quantity = quantity
+						models.CartOrders.ListCart[i].Quantity = quantity
 						fmt.Printf("Quantity for %s updated to %d. Press enter to continue... ", item.Name, quantity)
 					}
 					scanner.Scan()

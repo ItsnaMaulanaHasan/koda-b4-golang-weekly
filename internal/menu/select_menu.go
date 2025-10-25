@@ -58,16 +58,16 @@ func SelectMenu() {
 					fmt.Println("\nYou selected:", item.Name)
 					found = true
 					itemExists := false
-					for i := range models.Carts {
-						if models.Carts[i].ID == item.ID {
-							models.Carts[i].Quantity++
+					for i := range models.CartOrders.ListCart {
+						if models.CartOrders.ListCart[i].ID == item.ID {
+							models.CartOrders.ListCart[i].Quantity++
 							itemExists = true
 							break
 						}
 					}
 
 					if !itemExists {
-						models.Carts = append(models.Carts, models.CartItem{
+						models.CartOrders.ListCart = append(models.CartOrders.ListCart, models.CartItem{
 							ID:       item.ID,
 							Name:     item.Name,
 							Quantity: 1,

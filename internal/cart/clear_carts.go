@@ -25,7 +25,7 @@ func ClearCart() {
 			choiceStr, _ := reader.ReadString('\n')
 			choiceStr = strings.TrimSpace(choiceStr)
 			if strings.ToLower(choiceStr) == "y" {
-				models.Carts = []models.CartItem{}
+				models.CartOrders.ListCart = []models.CartItem{}
 				fmt.Print("Carts successfully cleared! Press enter to continue... ")
 				scanner.Scan()
 				loop = false

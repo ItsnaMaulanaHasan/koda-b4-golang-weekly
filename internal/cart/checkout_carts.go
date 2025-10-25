@@ -25,8 +25,8 @@ func CheckoutCart() {
 			choiceStr, _ := reader.ReadString('\n')
 			choiceStr = strings.TrimSpace(choiceStr)
 			if strings.ToLower(choiceStr) == "y" {
-				CreateInvoice(models.Carts)
-				models.Carts = []models.CartItem{}
+				CreateInvoice(models.CartOrders.ListCart)
+				models.CartOrders.ListCart = []models.CartItem{}
 				fmt.Print("Checkout successful! Press enter to continue... ")
 				scanner.Scan()
 				loop = false
