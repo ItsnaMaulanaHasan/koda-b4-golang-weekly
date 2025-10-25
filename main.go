@@ -28,48 +28,52 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
-		fmt.Printf("\x1bc")
-		fmt.Print("--- Welcome to Mixue ---\n\n")
-
-		for _, menu := range HomeMenus {
-			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
-		}
-		fmt.Print("\n0. Exit\n\n")
-
-		fmt.Print("Choose a menu: ")
-
-		input, _ := reader.ReadString('\n')
-		choiceStr := strings.TrimSpace(input)
-		choice, err := strconv.Atoi(choiceStr)
-
-		if err != nil {
-			fmt.Print("Invalid input, please enter a number...")
-			scanner.Scan()
-			continue
-		}
-
-		if choice == 0 {
-			loop = false
-			break
-		}
-
-		found := false
-		for _, menu := range HomeMenus {
-			if menu.ID == choice {
-				if menu.Action != nil {
-					menu.Action()
-				} else {
-					fmt.Print("Menu action not implemented yet...")
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					fmt.Print(r)
 					scanner.Scan()
 				}
-				found = true
-				break
-			}
-		}
+			}()
+			fmt.Printf("\x1bc")
+			fmt.Print("--- Welcome to Mixue ---\n\n")
 
-		if !found {
-			fmt.Print("Invalid menu option, press enter to continue...")
-			scanner.Scan()
-		}
+			for _, menu := range HomeMenus {
+				fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
+			}
+			fmt.Print("\n0. Exit\n\n")
+
+			fmt.Print("Choose a menu: ")
+
+			input, _ := reader.ReadString('\n')
+			choiceStr := strings.TrimSpace(input)
+			choice, err := strconv.Atoi(choiceStr)
+
+			if err != nil {
+				panic("Invalid input, please enter a number...")
+			}
+
+			if choice == 0 {
+				loop = false
+				return
+			}
+
+			found := false
+			for _, menu := range HomeMenus {
+				if menu.ID == choice {
+					if menu.Action != nil {
+						menu.Action()
+					} else {
+						panic("Menu action not implemented yet...")
+					}
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				panic("Invalid menu option, press enter to continue...")
+			}
+		}()
 	}
 }
