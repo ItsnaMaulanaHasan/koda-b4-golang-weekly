@@ -15,18 +15,11 @@ func EditCart() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		fmt.Println("\x1bc")
-		fmt.Print("--- Your Cart ---\n\n")
-		total := 0.0
-		for i, item := range models.Carts {
-			subtotal := float64(item.Quantity) * item.Price
-			fmt.Printf("%d. %s - Quantity: %d - Subtotal: Rp %.2f\n", i+1, item.Name, item.Quantity, subtotal)
-			total += subtotal
-		}
+		fmt.Print("----------------- Your Carts -----------------------\n\n")
 
-		fmt.Println("\nTotal: Rp", total)
-		fmt.Print("\n-----------------\n\n")
+		showCarts()
 
-		fmt.Print("0. exit\n")
+		fmt.Print("0. Exit\n")
 
 		fmt.Print("\nEnter the menu number you want to edit: ")
 		choiceStr, _ := reader.ReadString('\n')
