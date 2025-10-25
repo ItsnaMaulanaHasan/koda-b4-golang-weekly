@@ -14,7 +14,7 @@ import (
 
 var HomeMenus = []models.MenusPage{
 	{ID: 1, Menu: "Select Menu", Action: menu.SelectMenu},
-	{ID: 2, Menu: "Cart", Action: cart.ShowCarts},
+	{ID: 2, Menu: "Cart", Action: cart.CartsPage},
 	{ID: 3, Menu: "History", Action: history.ShowHistories},
 }
 

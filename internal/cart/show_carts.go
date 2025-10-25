@@ -16,40 +16,45 @@ var CartMenus = []models.MenusPage{
 	{ID: 3, Menu: "Clear Cart", Action: ClearCart},
 }
 
-func ShowCarts() {
+func showCarts() {
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
+
+	fmt.Println("----------------------------------------------------")
+	fmt.Fprintln(w, "No\tName\tQty\tSubtotal")
+	fmt.Fprintln(w, "---\t----------------------------\t---\t------------")
+
+	total := 0.0
+	for i, item := range models.Carts {
+		subtotal := float64(item.Quantity) * item.Price
+		fmt.Fprintf(w, "%d\t%s\t%d\tRp.%.2f\n", i+1, item.Name, item.Quantity, subtotal)
+		total += subtotal
+	}
+	w.Flush()
+
+	fmt.Print("----------------------------------------------------\n")
+	fmt.Printf("Total\t\t\t\t        Rp.%.2f", total)
+	fmt.Print("\n----------------------------------------------------\n\n")
+}
+
+func CartsPage() {
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		fmt.Println("\x1bc")
-		fmt.Print("----------------- Your Carts -----------------\n\n")
+
+		fmt.Print("----------------- Your Carts -----------------------\n\n")
 
 		if len(models.Carts) == 0 {
 			fmt.Print("Your carts is empty.\n\n")
-			fmt.Print("-----------------------------------------------\n\n")
+			fmt.Print("-------------------------------------------------\n\n")
 			fmt.Print("Enter to go back to the main menu... ")
 			scanner.Scan()
 			loop = false
 			continue
 		}
 
-		w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
-
-		fmt.Println("-----------------------------------------------")
-		fmt.Fprintln(w, "No\tName\tPrice")
-		fmt.Fprintln(w, "---\t----------------------------\t------------")
-
-		total := 0.0
-		for i, item := range models.Carts {
-			subtotal := float64(item.Quantity) * item.Price
-			fmt.Fprintf(w, "%d\t%s\tRp.%.2f\n", i+1, item.Name, subtotal)
-			total += subtotal
-		}
-		w.Flush()
-
-		fmt.Print("-----------------------------------------------\n")
-		fmt.Printf("Total\t\t\t\t   Rp.%v", total)
-		fmt.Print("\n-----------------------------------------------\n\n")
+		showCarts()
 
 		for _, menu := range CartMenus {
 			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
