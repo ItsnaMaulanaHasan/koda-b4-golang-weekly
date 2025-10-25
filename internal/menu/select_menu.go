@@ -76,7 +76,7 @@ func SelectMenu() {
 		}
 
 		if !found {
-			fmt.Print("Menu item not found, please try again... ")
+			fmt.Print("Menu not found, please try again... ")
 			scanner.Scan()
 			continue
 		}
