@@ -20,6 +20,7 @@ var HomeMenus = []models.MenusPage{
 
 func main() {
 	defer func() {
+		fmt.Printf("\x1bc")
 		fmt.Println("\nExiting program")
 		os.Exit(0)
 	}()
@@ -33,7 +34,7 @@ func main() {
 		for _, menu := range HomeMenus {
 			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
 		}
-		fmt.Print("\n0. exit\n\n")
+		fmt.Print("\n0. Exit\n\n")
 
 		fmt.Print("Choose a menu: ")
 
