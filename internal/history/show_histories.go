@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 )
 
 func ShowHistories() {
@@ -16,23 +17,30 @@ func ShowHistories() {
 
 	for loop {
 		fmt.Println("\x1bc")
-		fmt.Print("--- Your Histories ---\n\n")
+		fmt.Print("--------------- Your Histories ---------------\n\n")
 
 		if len(models.Histories) == 0 {
 			fmt.Print("Your histories is empty.\n\n")
-			fmt.Print("-----------------\n\n")
+			fmt.Print("----------------------------------------------\n\n")
 			fmt.Print("Press Enter to go back to the main menu... ")
 			scanner.Scan()
 			loop = false
 			continue
 		}
 
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
+
+		fmt.Println("----------------------------------------------")
+		fmt.Fprintln(w, "No\tNo. Invoice\tDate\tTotal")
+		fmt.Fprintln(w, "---\t----------------\t--------\t-------------")
+
 		for i, history := range models.Histories {
-			fmt.Printf("%d. ID: %d - Date: %s - No Invoice: %s - Total: Rp %.2f\n",
-				i+1, history.ID, history.Date, history.NoInvoice, history.Total)
+			fmt.Fprintf(w, "%d\t%s\t%s\tRp.%.2f\n", i+1, history.NoInvoice, history.Date, history.Total)
 		}
-		fmt.Print("\n-----------------\n\n")
-		fmt.Print("0. exit\n\n")
+		w.Flush()
+
+		fmt.Print("----------------------------------------------\n\n")
+		fmt.Print("0. Exit\n\n")
 		fmt.Print("Enter number to view details: ")
 
 		choiceStr, _ := reader.ReadString('\n')

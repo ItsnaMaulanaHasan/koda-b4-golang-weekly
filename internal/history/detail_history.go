@@ -22,12 +22,12 @@ func DetailsHistory(index int) {
 	history := models.Histories[index]
 
 	fmt.Println("--- History Details ---")
-	fmt.Println("ID:", history.ID)
 	fmt.Println("Date:", history.Date)
 	fmt.Println("No Invoice:", history.NoInvoice)
 	fmt.Println("\nMenu Items:")
 	for _, menu := range history.ListMenu {
-		fmt.Printf("  - %s (Price: Rp %.2f)\n", menu.Name, menu.Price)
+		subtotal := float64(menu.Quantity) * menu.Price
+		fmt.Printf("  - %s, Qty: %d, Price: Rp %.2f, Subtotal: Rp.%.2f\n", menu.Name, menu.Quantity, menu.Price, subtotal)
 	}
 	fmt.Printf("\nTotal: Rp %.2f\n", history.Total)
 	fmt.Println("\n-----------------")
