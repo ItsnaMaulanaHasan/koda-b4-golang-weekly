@@ -9,18 +9,8 @@ import (
 
 func DetailsHistory(index int) {
 	scanner := bufio.NewScanner(os.Stdin)
-
 	fmt.Println("\x1bc")
-
-	if index < 0 || index >= len(models.Histories) {
-		fmt.Println("History not found!")
-		fmt.Print("Press Enter to continue...")
-		scanner.Scan()
-		return
-	}
-
 	history := models.Histories[index]
-
 	fmt.Println("--- History Details ---")
 	fmt.Println("Date:", history.Date)
 	fmt.Println("No Invoice:", history.NoInvoice)
