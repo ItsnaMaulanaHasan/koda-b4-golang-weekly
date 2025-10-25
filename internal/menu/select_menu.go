@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 )
 
 func SelectMenu() {
@@ -15,13 +16,23 @@ func SelectMenu() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		fmt.Printf("\x1bc")
-		fmt.Print("--- Select Menu ---\n\n")
+		fmt.Print("----------------- Select Menu -----------------\n\n")
+
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
+
+		fmt.Println("-----------------------------------------------")
+		fmt.Fprintln(w, "No\tName\tPrice")
+		fmt.Fprintln(w, "---\t----------------------------\t------------")
 
 		for _, item := range models.Menus {
-			fmt.Printf("%d. %s - Rp %.2f\n", item.ID, item.Name, item.Price)
+			fmt.Fprintf(w, "%d\t%s\tRp.%.2f\n", item.ID, item.Name, item.Price)
 		}
-		fmt.Print("\n0. exit\n\n")
 
+		w.Flush()
+
+		fmt.Print("-----------------------------------------------\n")
+
+		fmt.Print("\n0. Back to Home\n")
 		fmt.Print("\nChoose a menu: ")
 
 		choiceStr, _ := reader.ReadString('\n')
