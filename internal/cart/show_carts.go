@@ -23,16 +23,14 @@ func showCarts() {
 	fmt.Fprintln(w, "No\tName\tQty\tSubtotal")
 	fmt.Fprintln(w, "---\t----------------------------\t---\t------------")
 
-	total := 0.0
 	for i, item := range models.Carts {
 		subtotal := float64(item.Quantity) * item.Price
 		fmt.Fprintf(w, "%d\t%s\t%d\tRp.%.2f\n", i+1, item.Name, item.Quantity, subtotal)
-		total += subtotal
 	}
 	w.Flush()
 
 	fmt.Print("----------------------------------------------------\n")
-	fmt.Printf("Total\t\t\t\t        Rp.%.2f", total)
+	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(models.Carts))
 	fmt.Print("\n----------------------------------------------------\n\n")
 }
 
