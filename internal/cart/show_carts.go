@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 )
 
 var CartMenus = []models.MenusPage{
@@ -21,32 +22,40 @@ func ShowCarts() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		fmt.Println("\x1bc")
-		fmt.Print("--- Your Carts ---\n\n")
+		fmt.Print("----------------- Your Carts -----------------\n\n")
 
 		if len(models.Carts) == 0 {
-			fmt.Print("Your cart is empty.\n\n")
-			fmt.Print("-----------------\n\n")
+			fmt.Print("Your carts is empty.\n\n")
+			fmt.Print("-----------------------------------------------\n\n")
 			fmt.Print("Enter to go back to the main menu... ")
 			scanner.Scan()
 			loop = false
 			continue
 		}
 
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
+
+		fmt.Println("-----------------------------------------------")
+		fmt.Fprintln(w, "No\tName\tPrice")
+		fmt.Fprintln(w, "---\t----------------------------\t------------")
+
 		total := 0.0
 		for i, item := range models.Carts {
 			subtotal := float64(item.Quantity) * item.Price
-			fmt.Printf("%d. %s - Quantity: %d - Subtotal: Rp %.2f\n", i+1, item.Name, item.Quantity, subtotal)
+			fmt.Fprintf(w, "%d\t%s\tRp.%.2f\n", i+1, item.Name, subtotal)
 			total += subtotal
 		}
+		w.Flush()
 
-		fmt.Println("\nTotal: Rp", total)
-		fmt.Print("\n-----------------\n\n")
+		fmt.Print("-----------------------------------------------\n")
+		fmt.Printf("Total\t\t\t\t   Rp.%v", total)
+		fmt.Print("\n-----------------------------------------------\n\n")
 
 		for _, menu := range CartMenus {
 			fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
 		}
 
-		fmt.Print("\n0. exit\n")
+		fmt.Print("\n0. Exit\n")
 
 		fmt.Print("\nChoose a menu: ")
 
