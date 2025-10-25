@@ -23,14 +23,12 @@ func showCarts() {
 	fmt.Fprintln(w, "No\tName\tQty\tSubtotal")
 	fmt.Fprintln(w, "---\t----------------------------\t---\t------------")
 
-	for i, item := range models.Carts {
-		subtotal := float64(item.Quantity) * item.Price
-		fmt.Fprintf(w, "%d\t%s\t%d\tRp.%.2f\n", i+1, item.Name, item.Quantity, subtotal)
-	}
+	models.PrintRows(models.CartOrders, w)
+
 	w.Flush()
 
 	fmt.Print("----------------------------------------------------\n")
-	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(models.Carts))
+	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(models.CartOrders.ListCart))
 	fmt.Print("\n----------------------------------------------------\n\n")
 }
 
@@ -49,7 +47,7 @@ func CartsPage() {
 			fmt.Println("\x1bc")
 			fmt.Print("----------------- Your Carts -----------------------\n\n")
 
-			if len(models.Carts) == 0 {
+			if len(models.CartOrders.ListCart) == 0 {
 				fmt.Print("Your carts is empty.\n\n")
 				fmt.Print("----------------------------------------------------\n\n")
 				fmt.Print("Press enter to go back to the main menu... ")

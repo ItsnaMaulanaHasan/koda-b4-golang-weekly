@@ -36,6 +36,18 @@ type CartItem struct {
 	Price    float64
 }
 
+type Carts struct {
+	ListCart []CartItem
+}
+
+func (cart Carts) PrintOut() []string {
+	var results []string
+	for i, item := range cart.ListCart {
+		results = append(results, fmt.Sprintf("%d\t%s\t%d\tRp.%.2f\n", i+1, item.Name, item.Quantity, item.Price*float64(item.Quantity)))
+	}
+	return results
+}
+
 type History struct {
 	ID        int
 	Date      string
@@ -71,6 +83,6 @@ var MenuMixue = Menus{ListMenu: []MenuItem{
 	{ID: 14, Name: "Original Earl Grey Tea", Price: 10000},
 }}
 
-var Carts = []CartItem{}
+var CartOrders = Carts{}
 
 var Histories = []History{}
