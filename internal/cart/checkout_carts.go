@@ -4,14 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"os"
 	"strings"
 )
 
-func CheckoutCart() {
+func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner) {
 	loop := true
-	reader := bufio.NewReader(os.Stdin)
-	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		func() {
 			defer func() {

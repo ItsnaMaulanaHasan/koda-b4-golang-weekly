@@ -4,15 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"os"
 	"strconv"
 	"strings"
 )
 
-func EditCart() {
+func EditCart(reader *bufio.Reader, scanner *bufio.Scanner) {
 	loop := true
-	reader := bufio.NewReader(os.Stdin)
-	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		func() {
 			defer func() {
@@ -24,7 +21,7 @@ func EditCart() {
 			fmt.Println("\x1bc")
 			fmt.Print("----------------- Your Carts -----------------------\n\n")
 
-			showCarts()
+			printCarts()
 
 			fmt.Print("0. Exit\n")
 

@@ -14,7 +14,7 @@ import (
 
 var HomeMenus = []models.MenusPage{
 	{ID: 1, Menu: "Select Menu", Action: menu.SelectMenu},
-	{ID: 2, Menu: "Cart", Action: cart.CartsPage},
+	{ID: 2, Menu: "Cart", Action: cart.ShowCarts},
 	{ID: 3, Menu: "History", Action: history.ShowHistories},
 }
 
@@ -62,7 +62,7 @@ func main() {
 			for _, menu := range HomeMenus {
 				if menu.ID == choice {
 					if menu.Action != nil {
-						menu.Action()
+						menu.Action(reader, scanner)
 					} else {
 						panic("Menu action not implemented yet...")
 					}

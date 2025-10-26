@@ -1,6 +1,7 @@
 package models
 
 import (
+	"bufio"
 	"fmt"
 	"text/tabwriter"
 )
@@ -26,7 +27,7 @@ func (menu Menus) PrintOut() []string {
 type MenusPage struct {
 	ID     int
 	Menu   string
-	Action func()
+	Action func(reader *bufio.Reader, scanner *bufio.Scanner)
 }
 
 type CartItem struct {
@@ -95,6 +96,6 @@ var MenuMixue = Menus{ListMenu: []MenuItem{
 	{ID: 14, Name: "Original Earl Grey Tea", Price: 10000},
 }}
 
-var CartOrders = Carts{}
+var CartOrders = &Carts{}
 
-var HistoryOrders = Histories{}
+var HistoryOrders = &Histories{}

@@ -16,7 +16,7 @@ var CartMenus = []models.MenusPage{
 	{ID: 3, Menu: "Clear Cart", Action: ClearCart},
 }
 
-func showCarts() {
+func printCarts() {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
 
 	fmt.Println("----------------------------------------------------")
@@ -32,10 +32,8 @@ func showCarts() {
 	fmt.Print("\n----------------------------------------------------\n\n")
 }
 
-func CartsPage() {
+func ShowCarts(reader *bufio.Reader, scanner *bufio.Scanner) {
 	loop := true
-	reader := bufio.NewReader(os.Stdin)
-	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		func() {
 			defer func() {
@@ -56,7 +54,7 @@ func CartsPage() {
 				return
 			}
 
-			showCarts()
+			printCarts()
 
 			for _, menu := range CartMenus {
 				fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
@@ -83,7 +81,7 @@ func CartsPage() {
 			for _, menu := range CartMenus {
 				if menu.ID == choice {
 					if menu.Action != nil {
-						menu.Action()
+						menu.Action(reader, scanner)
 					} else {
 						panic("Menu action not implemented yet...")
 					}

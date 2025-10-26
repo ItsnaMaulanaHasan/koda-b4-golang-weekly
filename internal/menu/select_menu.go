@@ -10,10 +10,8 @@ import (
 	"text/tabwriter"
 )
 
-func SelectMenu() {
+func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner) {
 	loop := true
-	reader := bufio.NewReader(os.Stdin)
-	scanner := bufio.NewScanner(os.Stdin)
 	for loop {
 		func() {
 			defer func() {
