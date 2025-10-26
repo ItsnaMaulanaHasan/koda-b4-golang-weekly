@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
+	"golang-weekly/internal/utils"
 	"strings"
 	"text/tabwriter"
 )
@@ -21,8 +22,7 @@ func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wri
 			fmt.Println("\x1bc")
 			printCarts(scanner, w)
 			fmt.Print("Are you sure you want to checkout (y/n)? ")
-			choiceStr, _ := reader.ReadString('\n')
-			choiceStr = strings.TrimSpace(choiceStr)
+			choiceStr := utils.InputString(reader)
 			if strings.ToLower(choiceStr) == "y" {
 				CreateInvoice(models.CartOrders.ListCart)
 				models.CartOrders.ListCart = []models.CartItem{}

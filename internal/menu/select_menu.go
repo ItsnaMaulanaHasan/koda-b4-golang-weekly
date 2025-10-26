@@ -4,8 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"strconv"
-	"strings"
+	"golang-weekly/internal/utils"
 	"text/tabwriter"
 )
 
@@ -35,9 +34,8 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 			fmt.Print("\n0. Back to Home\n")
 			fmt.Print("\nChoose a menu: ")
 
-			choiceStr, _ := reader.ReadString('\n')
-			choiceStr = strings.TrimSpace(choiceStr)
-			choice, err := strconv.Atoi(choiceStr)
+			choice, err := utils.InputInt(reader)
+
 			if err != nil {
 				panic("Invalid input, please enter a number... ")
 			}

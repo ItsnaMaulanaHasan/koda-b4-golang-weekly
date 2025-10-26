@@ -4,8 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"strconv"
-	"strings"
+	"golang-weekly/internal/utils"
 	"text/tabwriter"
 )
 
@@ -64,9 +63,7 @@ func ShowCarts(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer
 
 			fmt.Print("\nChoose a menu: ")
 
-			choiceStr, _ := reader.ReadString('\n')
-			choiceStr = strings.TrimSpace(choiceStr)
-			choice, err := strconv.Atoi(choiceStr)
+			choice, err := utils.InputInt(reader)
 
 			if err != nil {
 				panic("Invalid input, please enter a number... ")

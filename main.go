@@ -7,9 +7,8 @@ import (
 	"golang-weekly/internal/history"
 	"golang-weekly/internal/menu"
 	"golang-weekly/internal/models"
+	"golang-weekly/internal/utils"
 	"os"
-	"strconv"
-	"strings"
 	"text/tabwriter"
 )
 
@@ -47,9 +46,7 @@ func main() {
 
 			fmt.Print("Choose a menu: ")
 
-			input, _ := reader.ReadString('\n')
-			choiceStr := strings.TrimSpace(input)
-			choice, err := strconv.Atoi(choiceStr)
+			choice, err := utils.InputInt(reader)
 
 			if err != nil {
 				panic("Invalid input, please enter a number...")

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
+	"golang-weekly/internal/utils"
 	"strconv"
 	"strings"
 	"text/tabwriter"
@@ -29,9 +30,8 @@ func EditCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer)
 			fmt.Print("0. Exit\n")
 
 			fmt.Print("\nEnter the menu number you want to edit: ")
-			choiceStr, _ := reader.ReadString('\n')
-			choiceStr = strings.TrimSpace(choiceStr)
-			choice, err := strconv.Atoi(choiceStr)
+
+			choice, err := utils.InputInt(reader)
 
 			if err != nil {
 				panic("Invalid input, please enter a number... ")
