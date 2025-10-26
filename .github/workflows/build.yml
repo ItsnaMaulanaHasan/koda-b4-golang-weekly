@@ -1,0 +1,44 @@
+name: Build and Release Mixue POS Application
+run-name: Building and Releasing Mixue POS Application
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.25.3"
+
+      - name: Build for Windows AMD64
+        run: GOOS=windows GOARCH=amd64 go build -o playground_windows_amd64.exe .
+
+      - name: Build for Linux AMD64
+        run: GOOS=linux GOARCH=amd64 go build -o playground_linux_amd64 .
+
+      - name: Build for Linux ARM64
+        run: GOOS=linux GOARCH=arm64 go build -o playground_linux_arm64 .
+
+      - name: Build for macOS ARM64
+        run: GOOS=darwin GOARCH=arm64 go build -o playground_darwin_arm64 .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            playground_windows_amd64.exe
+            playground_linux_amd64
+            playground_linux_arm64
+            playground_darwin_arm64
+          generate_release_notes: true
+          draft: false
+          prerelease: false
