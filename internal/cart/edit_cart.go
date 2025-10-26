@@ -6,9 +6,10 @@ import (
 	"golang-weekly/internal/models"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 )
 
-func EditCart(reader *bufio.Reader, scanner *bufio.Scanner) {
+func EditCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
 	loop := true
 	for loop {
 		func() {
@@ -19,9 +20,11 @@ func EditCart(reader *bufio.Reader, scanner *bufio.Scanner) {
 				}
 			}()
 			fmt.Println("\x1bc")
-			fmt.Print("----------------- Your Carts -----------------------\n\n")
 
-			printCarts()
+			loop = printCarts(scanner, w)
+			if !loop {
+				return
+			}
 
 			fmt.Print("0. Exit\n")
 

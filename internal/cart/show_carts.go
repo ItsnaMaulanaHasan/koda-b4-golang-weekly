@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"os"
 	"strconv"
 	"strings"
 	"text/tabwriter"
@@ -16,9 +15,16 @@ var CartMenus = []models.MenusPage{
 	{ID: 3, Menu: "Clear Cart", Action: ClearCart},
 }
 
-func printCarts() {
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
+func printCarts(scanner *bufio.Scanner, w *tabwriter.Writer) bool {
+	fmt.Print("----------------- Your Carts -----------------------\n\n")
+	if len(models.CartOrders.ListCart) == 0 {
+		fmt.Print("Your carts is empty.\n\n")
+		fmt.Print("----------------------------------------------------\n\n")
+		fmt.Print("Press enter to go back to the main menu... ")
+		scanner.Scan()
+		return false
 
+	}
 	fmt.Println("----------------------------------------------------")
 	fmt.Fprintln(w, "No\tName\tQty\tSubtotal")
 	fmt.Fprintln(w, "---\t----------------------------\t---\t------------")
@@ -30,9 +36,10 @@ func printCarts() {
 	fmt.Print("----------------------------------------------------\n")
 	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(models.CartOrders.ListCart))
 	fmt.Print("\n----------------------------------------------------\n\n")
+	return true
 }
 
-func ShowCarts(reader *bufio.Reader, scanner *bufio.Scanner) {
+func ShowCarts(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
 	loop := true
 	for loop {
 		func() {
@@ -43,18 +50,11 @@ func ShowCarts(reader *bufio.Reader, scanner *bufio.Scanner) {
 				}
 			}()
 			fmt.Println("\x1bc")
-			fmt.Print("----------------- Your Carts -----------------------\n\n")
 
-			if len(models.CartOrders.ListCart) == 0 {
-				fmt.Print("Your carts is empty.\n\n")
-				fmt.Print("----------------------------------------------------\n\n")
-				fmt.Print("Press enter to go back to the main menu... ")
-				scanner.Scan()
-				loop = false
+			loop = printCarts(scanner, w)
+			if !loop {
 				return
 			}
-
-			printCarts()
 
 			for _, menu := range CartMenus {
 				fmt.Printf("%d. %s\n", menu.ID, menu.Menu)
@@ -81,7 +81,7 @@ func ShowCarts(reader *bufio.Reader, scanner *bufio.Scanner) {
 			for _, menu := range CartMenus {
 				if menu.ID == choice {
 					if menu.Action != nil {
-						menu.Action(reader, scanner)
+						menu.Action(reader, scanner, w)
 					} else {
 						panic("Menu action not implemented yet...")
 					}

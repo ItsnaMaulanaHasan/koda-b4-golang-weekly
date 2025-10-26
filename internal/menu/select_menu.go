@@ -4,13 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"os"
 	"strconv"
 	"strings"
 	"text/tabwriter"
 )
 
-func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner) {
+func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
 	loop := true
 	for loop {
 		func() {
@@ -22,8 +21,6 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner) {
 			}()
 			fmt.Printf("\x1bc")
 			fmt.Print("----------------- Select Menu -----------------\n\n")
-
-			w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
 
 			fmt.Println("-----------------------------------------------")
 			fmt.Fprintln(w, "No\tName\tPrice")

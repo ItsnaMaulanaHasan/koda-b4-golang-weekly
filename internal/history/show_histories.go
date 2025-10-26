@@ -4,13 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"os"
 	"strconv"
 	"strings"
 	"text/tabwriter"
 )
 
-func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner) {
+func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
 	loop := true
 	for loop {
 		func() {
@@ -31,8 +30,6 @@ func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner) {
 				loop = false
 				return
 			}
-
-			w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
 
 			fmt.Println("----------------------------------------------")
 			fmt.Fprintln(w, "No\tDate\tNo. Invoice\tTotal")

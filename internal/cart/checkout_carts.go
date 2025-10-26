@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"golang-weekly/internal/models"
 	"strings"
+	"text/tabwriter"
 )
 
-func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner) {
+func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
 	loop := true
 	for loop {
 		func() {
@@ -18,6 +19,7 @@ func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner) {
 				}
 			}()
 			fmt.Println("\x1bc")
+			printCarts(scanner, w)
 			fmt.Print("Are you sure you want to checkout (y/n)? ")
 			choiceStr, _ := reader.ReadString('\n')
 			choiceStr = strings.TrimSpace(choiceStr)
