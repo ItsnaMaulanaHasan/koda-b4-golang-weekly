@@ -56,7 +56,7 @@ func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wr
 			if choice < 0 || choice > len(models.HistoryOrders.ListHistory) {
 				panic("History not found!")
 			} else {
-				DetailsHistory(choice - 1)
+				DetailsHistory(choice-1, scanner)
 			}
 
 		}()

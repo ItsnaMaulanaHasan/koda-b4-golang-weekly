@@ -4,11 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"golang-weekly/internal/models"
-	"os"
 )
 
-func DetailsHistory(index int) {
-	scanner := bufio.NewScanner(os.Stdin)
+func DetailsHistory(index int, scanner *bufio.Scanner) {
 	fmt.Println("\x1bc")
 	history := models.HistoryOrders.ListHistory[index]
 	fmt.Println("--- History Details ---")

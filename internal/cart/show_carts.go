@@ -33,7 +33,7 @@ func printCarts(scanner *bufio.Scanner, w *tabwriter.Writer) bool {
 	w.Flush()
 
 	fmt.Print("----------------------------------------------------\n")
-	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(models.CartOrders.ListCart))
+	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(&models.CartOrders.ListCart))
 	fmt.Print("\n----------------------------------------------------\n\n")
 	return true
 }
