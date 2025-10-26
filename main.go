@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 )
 
 var HomeMenus = []models.MenusPage{
@@ -27,6 +28,7 @@ func main() {
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
 	for loop {
 		func() {
 			defer func() {
@@ -62,7 +64,7 @@ func main() {
 			for _, menu := range HomeMenus {
 				if menu.ID == choice {
 					if menu.Action != nil {
-						menu.Action(reader, scanner)
+						menu.Action(reader, scanner, w)
 					} else {
 						panic("Menu action not implemented yet...")
 					}

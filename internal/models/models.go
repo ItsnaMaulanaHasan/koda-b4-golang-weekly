@@ -6,6 +6,11 @@ import (
 	"text/tabwriter"
 )
 
+type MenusPage struct {
+	ID     int
+	Menu   string
+	Action func(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer)
+}
 type MenuItem struct {
 	ID    int
 	Name  string
@@ -14,20 +19,6 @@ type MenuItem struct {
 
 type Menus struct {
 	ListMenu []MenuItem
-}
-
-func (menu Menus) PrintOut() []string {
-	var results []string
-	for i, item := range menu.ListMenu {
-		results = append(results, fmt.Sprintf("%d\t%s\tRp.%.2f\n", i+1, item.Name, item.Price))
-	}
-	return results
-}
-
-type MenusPage struct {
-	ID     int
-	Menu   string
-	Action func(reader *bufio.Reader, scanner *bufio.Scanner)
 }
 
 type CartItem struct {
@@ -39,14 +30,6 @@ type CartItem struct {
 
 type Carts struct {
 	ListCart []CartItem
-}
-
-func (cart Carts) PrintOut() []string {
-	var results []string
-	for i, item := range cart.ListCart {
-		results = append(results, fmt.Sprintf("%d\t%s\t%d\tRp.%.2f\n", i+1, item.Name, item.Quantity, item.Price*float64(item.Quantity)))
-	}
-	return results
 }
 
 type History struct {
@@ -61,25 +44,33 @@ type Histories struct {
 	ListHistory []History
 }
 
-func (history Histories) PrintOut() []string {
-	var results []string
-	for i, item := range history.ListHistory {
-		results = append(results, fmt.Sprintf("%d\t%s\t%s\tRp.%.2f\n", i+1, item.Date, item.NoInvoice, item.Total))
+func (menu *Menus) PrintOut(w *tabwriter.Writer) {
+	for i, item := range menu.ListMenu {
+		fmt.Fprintf(w, "%d\t%s\tRp.%.2f\n", i+1, item.Name, item.Price)
 	}
-	return results
+}
+
+func (cart *Carts) PrintOut(w *tabwriter.Writer) {
+	for i, item := range cart.ListCart {
+		fmt.Fprintf(w, "%d\t%s\t%d\tRp.%.2f\n", i+1, item.Name, item.Quantity, item.Price*float64(item.Quantity))
+	}
+}
+
+func (history *Histories) PrintOut(w *tabwriter.Writer) {
+	for i, item := range history.ListHistory {
+		fmt.Fprintf(w, "%d\t%s\t%s\tRp.%.2f\n", i+1, item.Date, item.NoInvoice, item.Total)
+	}
 }
 
 type Printable interface {
-	PrintOut() []string
+	PrintOut(w *tabwriter.Writer)
 }
 
 func PrintRows(p Printable, w *tabwriter.Writer) {
-	for _, row := range p.PrintOut() {
-		fmt.Fprint(w, row)
-	}
+	p.PrintOut(w)
 }
 
-var MenuMixue = Menus{ListMenu: []MenuItem{
+var MenuMixue = &Menus{ListMenu: []MenuItem{
 	{ID: 1, Name: "Mixue Ice Cream", Price: 8000},
 	{ID: 2, Name: "BOBA Sundae", Price: 16000},
 	{ID: 3, Name: "Strawberry Mi-Shake", Price: 16000},
