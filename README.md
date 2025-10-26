@@ -37,7 +37,7 @@ All operations run in parallel using goroutines, improving user experience with 
 - Interface implementation for flexibility
 - Proper error handling with panic/recover
 
-## 👨‍💻 Developer
+## Developer
 
 **Itsna Maulana Hasan**
 
