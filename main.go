@@ -16,6 +16,7 @@ var HomeMenus = []models.MenusPage{
 	{ID: 1, Menu: "Select Menu", Action: menu.SelectMenu},
 	{ID: 2, Menu: "Cart", Action: cart.ShowCarts},
 	{ID: 3, Menu: "History", Action: history.ShowHistories},
+	{ID: 4, Menu: "Clear Cache", Action: utils.ClearCache},
 }
 
 func main() {
