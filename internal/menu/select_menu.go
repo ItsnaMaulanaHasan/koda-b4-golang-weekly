@@ -2,13 +2,36 @@ package menu
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"golang-weekly/internal/models"
 	"golang-weekly/internal/utils"
 	"text/tabwriter"
 )
 
+func getDataMenu() []models.Menu {
+	var menus []models.Menu
+	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
+
+	err := json.Unmarshal(dataMenu, &menus)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return menus
+}
+
 func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("\x1bc")
+			fmt.Println(r)
+			fmt.Print("Press Enter to go back...")
+			scanner.Scan()
+		}
+	}()
+	models.Menus = getDataMenu()
 	loop := true
 	for loop {
 		func() {

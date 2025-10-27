@@ -2,9 +2,7 @@ package models
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
-	"golang-weekly/internal/utils"
 	"text/tabwriter"
 )
 
@@ -14,20 +12,7 @@ type Menu struct {
 	Price float64
 }
 
-func getDataMenu() []Menu {
-	var menus []Menu
-	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
-
-	err := json.Unmarshal(dataMenu, &menus)
-
-	if err != nil {
-		panic("Failed to get data menu")
-	}
-
-	return menus
-}
-
-var Menus = getDataMenu()
+var Menus []Menu
 
 type MenusPage struct {
 	ID     int
