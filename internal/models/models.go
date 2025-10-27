@@ -2,9 +2,32 @@ package models
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
+	"golang-weekly/internal/utils"
 	"text/tabwriter"
 )
+
+type Menu struct {
+	ID    int
+	Name  string
+	Price float64
+}
+
+func getDataMenu() []Menu {
+	var menus []Menu
+	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
+
+	err := json.Unmarshal(dataMenu, &menus)
+
+	if err != nil {
+		panic("Failed to get data menu")
+	}
+
+	return menus
+}
+
+var Menus = getDataMenu()
 
 type MenusPage struct {
 	ID     int
@@ -33,6 +56,12 @@ type History struct {
 
 type Histories struct {
 	ListHistory []History
+}
+
+func (menu *Menu) PrintOut(w *tabwriter.Writer) {
+	for i, item := range Menus {
+		fmt.Fprintf(w, "%d\t%s\tRp.%.2f\n", i+1, item.Name, item.Price)
+	}
 }
 
 func (cart *Carts) PrintOut(w *tabwriter.Writer) {
