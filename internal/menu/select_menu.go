@@ -54,10 +54,10 @@ func cachingDataMenu() {
 		modTimeFile := fileTemp.ModTime()
 		currentTime := time.Now()
 		duration := currentTime.Sub(modTimeFile)
-		targetDuration := 5 * time.Second
+		targetDuration := 15 * time.Second
 
 		if duration >= targetDuration {
-			// jika waktu sudah melebihi 5 detik maka:
+			// jika waktu sudah melebihi 15 detik maka:
 			getDataMenu(&tempFilePath)
 		} else {
 			// membaca isi file temp
