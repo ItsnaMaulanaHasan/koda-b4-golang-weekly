@@ -8,6 +8,7 @@ import (
 	"golang-weekly/internal/utils"
 	"os"
 	"path/filepath"
+	"strconv"
 	"text/tabwriter"
 	"time"
 )
@@ -54,7 +55,8 @@ func cachingDataMenu() {
 		modTimeFile := fileTemp.ModTime()
 		currentTime := time.Now()
 		duration := currentTime.Sub(modTimeFile)
-		targetDuration := 15 * time.Second
+		duration_time, _ := strconv.Atoi(utils.LoadDefaultEnv("DURATION_CACHE", "30"))
+		targetDuration := time.Duration(duration_time) * time.Second
 
 		if duration >= targetDuration {
 			// jika waktu sudah melebihi 15 detik maka:
