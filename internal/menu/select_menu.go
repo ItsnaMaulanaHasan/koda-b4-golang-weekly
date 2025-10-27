@@ -12,10 +12,24 @@ import (
 	"time"
 )
 
-func getDataMenu() []models.Menu {
-	var menus []models.Menu
-	var dataMenu []byte
+func getDataMenu(tempFilePath *string) {
+	// get data menu
+	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
 
+	// unmarshall dataMenu ke dalam bentu slice of struct
+	err := json.Unmarshal(dataMenu, &models.Menus)
+	if err != nil {
+		panic(err)
+	}
+
+	// membuat file temp dan mengisinya dengan dataMenu
+	err = os.WriteFile(*tempFilePath, dataMenu, 0666)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func cachingDataMenu() {
 	tempPath := os.TempDir()
 	tempFilePath := filepath.Join(tempPath, "menu.json")
 
@@ -23,20 +37,7 @@ func getDataMenu() []models.Menu {
 	fileTemp, err := os.Stat(tempFilePath)
 	if os.IsNotExist(err) {
 		// jika file tidak ada maka:
-		// get data menu
-		dataMenu = utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
-
-		// unmarshall dataMenu ke dalam bentu slice of struct
-		err = json.Unmarshal(dataMenu, &menus)
-		if err != nil {
-			panic(err)
-		}
-
-		// membuat file temp dan mengisinya dengan dataMenu
-		err = os.WriteFile(tempFilePath, dataMenu, 0666)
-		if err != nil {
-			panic(err)
-		}
+		getDataMenu(&tempFilePath)
 	} else if err != nil {
 		// jika ada error yang lain
 		panic(err)
@@ -48,21 +49,8 @@ func getDataMenu() []models.Menu {
 		targetDuration := 15 * time.Minute
 
 		if duration >= targetDuration {
-			// jika waktu sudah melebihi 15 menit
-			// get data lagi
-			dataMenu = utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
-
-			// unmarshall dataMenu ke dalam bentu slice of struct
-			err = json.Unmarshal(dataMenu, &menus)
-			if err != nil {
-				panic(err)
-			}
-
-			//  membuat file temp dan mengisinya dengan dataMenu
-			err = os.WriteFile(tempFilePath, dataMenu, 0777)
-			if err != nil {
-				panic(err)
-			}
+			// jika waktu sudah melebihi 15 menit maka:
+			getDataMenu(&tempFilePath)
 		} else {
 			// membaca isi file temp
 			fileData, err := os.ReadFile(tempFilePath)
@@ -71,14 +59,12 @@ func getDataMenu() []models.Menu {
 			}
 
 			// unmarshall isi file temp ke dalam bentuk slice of struct
-			err = json.Unmarshal(fileData, &menus)
+			err = json.Unmarshal(fileData, &models.Menus)
 			if err != nil {
 				panic(err)
 			}
 		}
 	}
-
-	return menus
 }
 
 func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
@@ -90,7 +76,7 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 			scanner.Scan()
 		}
 	}()
-	models.Menus = getDataMenu()
+	cachingDataMenu()
 	loop := true
 	for loop {
 		func() {
