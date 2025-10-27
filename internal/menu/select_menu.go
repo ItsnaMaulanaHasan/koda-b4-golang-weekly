@@ -2,6 +2,7 @@ package menu
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"golang-weekly/internal/models"
 	"golang-weekly/internal/utils"
@@ -9,6 +10,22 @@ import (
 )
 
 func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
+	type Menu struct {
+		ID    int
+		Name  string
+		Price float64
+	}
+
+	var menus []Menu
+
+	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
+
+	err := json.Unmarshal(dataMenu, &menus)
+
+	if err != nil {
+		panic("Failed to get data menu")
+	}
+
 	loop := true
 	for loop {
 		func() {
@@ -25,7 +42,9 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 			fmt.Fprintln(w, "No\tName\tPrice")
 			fmt.Fprintln(w, "---\t----------------------------\t------------")
 
-			models.PrintRows(models.MenuMixue, w)
+			for i, item := range menus {
+				fmt.Fprintf(w, "%d\t%s\tRp.%.2f\n", i+1, item.Name, item.Price)
+			}
 
 			w.Flush()
 
@@ -46,7 +65,7 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 			}
 
 			found := false
-			for _, item := range models.MenuMixue.ListMenu {
+			for _, item := range menus {
 				if item.ID == choice {
 					fmt.Println("\nYou selected:", item.Name)
 					found = true
