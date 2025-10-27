@@ -55,7 +55,7 @@ func cachingDataMenu() {
 		modTimeFile := fileTemp.ModTime()
 		currentTime := time.Now()
 		duration := currentTime.Sub(modTimeFile)
-		duration_time, _ := strconv.Atoi(utils.LoadDefaultEnv("DURATION_CACHE", "30"))
+		duration_time, _ := strconv.Atoi(utils.LoadDefaultEnv("DURATION_CACHE", "3600"))
 		targetDuration := time.Duration(duration_time) * time.Second
 
 		if duration >= targetDuration {
@@ -110,6 +110,7 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 			fmt.Print("-----------------------------------------------\n")
 
 			fmt.Print("\n0. Back to Home\n")
+			fmt.Printf("\nDuration cache: %vs\n", utils.LoadDefaultEnv("DURATION_CACHE", "3600"))
 			fmt.Print("\nChoose a menu: ")
 
 			choice, err := utils.InputInt(reader)
