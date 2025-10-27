@@ -31,7 +31,15 @@ func getDataMenu(tempFilePath *string) {
 
 func cachingDataMenu() {
 	tempPath := os.TempDir()
-	tempFilePath := filepath.Join(tempPath, "menu.json")
+
+	// membuat directory file temp
+	mixuePosDir := filepath.Join(tempPath, "mixue-pos")
+	err := os.MkdirAll(mixuePosDir, 0755)
+	if err != nil {
+		panic(err)
+	}
+
+	tempFilePath := filepath.Join(mixuePosDir, "menu.json")
 
 	// cek apakah file Temp ada
 	fileTemp, err := os.Stat(tempFilePath)
