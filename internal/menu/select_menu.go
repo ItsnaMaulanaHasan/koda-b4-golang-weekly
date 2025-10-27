@@ -6,17 +6,76 @@ import (
 	"fmt"
 	"golang-weekly/internal/models"
 	"golang-weekly/internal/utils"
+	"os"
+	"path/filepath"
 	"text/tabwriter"
+	"time"
 )
 
 func getDataMenu() []models.Menu {
 	var menus []models.Menu
-	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
+	var dataMenu []byte
 
-	err := json.Unmarshal(dataMenu, &menus)
+	tempPath := os.TempDir()
+	tempFilePath := filepath.Join(tempPath, "menu.json")
 
-	if err != nil {
+	// cek apakah file Temp ada
+	fileTemp, err := os.Stat(tempFilePath)
+	if os.IsNotExist(err) {
+		// jika file tidak ada maka:
+		// get data menu
+		dataMenu = utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
+
+		// unmarshall dataMenu ke dalam bentu slice of struct
+		err = json.Unmarshal(dataMenu, &menus)
+		if err != nil {
+			panic(err)
+		}
+
+		// membuat file temp dan mengisinya dengan dataMenu
+		err = os.WriteFile(tempFilePath, dataMenu, 0666)
+		if err != nil {
+			panic(err)
+		}
+	} else if err != nil {
+		// jika ada error yang lain
 		panic(err)
+	} else {
+		// jika file temp sudah ada
+		modTimeFile := fileTemp.ModTime()
+		currentTime := time.Now()
+		duration := currentTime.Sub(modTimeFile)
+		targetDuration := 15 * time.Minute
+
+		if duration >= targetDuration {
+			// jika waktu sudah melebihi 15 menit
+			// get data lagi
+			dataMenu = utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
+
+			// unmarshall dataMenu ke dalam bentu slice of struct
+			err = json.Unmarshal(dataMenu, &menus)
+			if err != nil {
+				panic(err)
+			}
+
+			//  membuat file temp dan mengisinya dengan dataMenu
+			err = os.WriteFile(tempFilePath, dataMenu, 0777)
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			// membaca isi file temp
+			fileData, err := os.ReadFile(tempFilePath)
+			if err != nil {
+				panic(err)
+			}
+
+			// unmarshall isi file temp ke dalam bentuk slice of struct
+			err = json.Unmarshal(fileData, &menus)
+			if err != nil {
+				panic(err)
+			}
+		}
 	}
 
 	return menus
