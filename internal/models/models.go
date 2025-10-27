@@ -52,9 +52,7 @@ type History struct {
 	Total     float64
 }
 
-type Histories struct {
-	ListHistory []History
-}
+var Histories = []History{}
 
 func (menu *Menu) PrintOut(w *tabwriter.Writer) {
 	for i, item := range Menus {
@@ -68,8 +66,8 @@ func (cart *Cart) PrintOut(w *tabwriter.Writer) {
 	}
 }
 
-func (history *Histories) PrintOut(w *tabwriter.Writer) {
-	for i, item := range history.ListHistory {
+func (history *History) PrintOut(w *tabwriter.Writer) {
+	for i, item := range Histories {
 		fmt.Fprintf(w, "%d\t%s\t%s\tRp.%.2f\n", i+1, item.Date, item.NoInvoice, item.Total)
 	}
 }
@@ -81,5 +79,3 @@ type Printable interface {
 func PrintRows(p Printable, w *tabwriter.Writer) {
 	p.PrintOut(w)
 }
-
-var HistoryOrders = &Histories{}

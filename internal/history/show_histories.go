@@ -21,7 +21,7 @@ func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wr
 			fmt.Println("\x1bc")
 			fmt.Print("--------------- Your Histories ---------------\n\n")
 
-			if len(models.HistoryOrders.ListHistory) == 0 {
+			if len(models.Histories) == 0 {
 				fmt.Print("Your histories is empty.\n\n")
 				fmt.Print("----------------------------------------------\n\n")
 				fmt.Print("Press Enter to go back to the main menu... ")
@@ -34,7 +34,7 @@ func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wr
 			fmt.Fprintln(w, "No\tDate\tNo. Invoice\tTotal")
 			fmt.Fprintln(w, "---\t----------\t--------------\t-------------")
 
-			models.PrintRows(models.HistoryOrders, w)
+			models.PrintRows(&models.History{}, w)
 
 			w.Flush()
 
@@ -53,7 +53,7 @@ func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wr
 				return
 			}
 
-			if choice < 0 || choice > len(models.HistoryOrders.ListHistory) {
+			if choice < 0 || choice > len(models.Histories) {
 				panic("History not found!")
 			} else {
 				DetailsHistory(choice-1, scanner)
