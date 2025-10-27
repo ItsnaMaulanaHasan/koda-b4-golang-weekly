@@ -24,7 +24,7 @@ func ClearCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer
 			fmt.Print("Are you sure you want to clear carts (y/n)? ")
 			choiceStr := utils.InputString(reader)
 			if strings.ToLower(choiceStr) == "y" {
-				models.CartOrders.ListCart = []models.CartItem{}
+				models.Carts = []models.Cart{}
 				fmt.Print("Carts successfully cleared! Press enter to continue... ")
 				scanner.Scan()
 				loop = false

@@ -35,7 +35,7 @@ func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wri
 				go func() {
 					defer wg.Done()
 					fmt.Print("Create invoice... ")
-					invoice <- createInvoice(&models.CartOrders.ListCart)
+					invoice <- createInvoice(&models.Carts)
 					time.Sleep(2 * time.Second)
 					fmt.Println("✅")
 				}()
@@ -64,7 +64,7 @@ func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wri
 
 				time.Sleep(200 * time.Millisecond)
 
-				models.CartOrders.ListCart = []models.CartItem{}
+				models.Carts = []models.Cart{}
 				fmt.Print("Checkout successful! Press enter to continue... ")
 				scanner.Scan()
 				loop = false

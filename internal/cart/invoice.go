@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func getTotal(menuItems *[]models.CartItem) float64 {
+func getTotal(menuItems *[]models.Cart) float64 {
 	total := 0.0
 	for _, item := range *menuItems {
 		subtotal := float64(item.Quantity) * item.Price
@@ -16,7 +16,7 @@ func getTotal(menuItems *[]models.CartItem) float64 {
 	return total
 }
 
-func createInvoice(menuItems *[]models.CartItem) models.History {
+func createInvoice(menuItems *[]models.Cart) models.History {
 	ID := rand.IntN(9000) + 1000
 	invoice := fmt.Sprintf("INV-MIXUE-%v", ID)
 

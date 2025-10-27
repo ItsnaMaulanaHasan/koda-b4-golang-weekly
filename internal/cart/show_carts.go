@@ -16,7 +16,7 @@ var CartMenus = []models.MenusPage{
 
 func printCarts(scanner *bufio.Scanner, w *tabwriter.Writer) bool {
 	fmt.Print("----------------- Your Carts -----------------------\n\n")
-	if len(models.CartOrders.ListCart) == 0 {
+	if len(models.Carts) == 0 {
 		fmt.Print("Your carts is empty.\n\n")
 		fmt.Print("----------------------------------------------------\n\n")
 		fmt.Print("Press enter to go back to the main menu... ")
@@ -28,12 +28,12 @@ func printCarts(scanner *bufio.Scanner, w *tabwriter.Writer) bool {
 	fmt.Fprintln(w, "No\tName\tQty\tSubtotal")
 	fmt.Fprintln(w, "---\t----------------------------\t---\t------------")
 
-	models.PrintRows(models.CartOrders, w)
+	models.PrintRows(&models.Cart{}, w)
 
 	w.Flush()
 
 	fmt.Print("----------------------------------------------------\n")
-	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(&models.CartOrders.ListCart))
+	fmt.Printf("Total\t\t\t\t        Rp.%.2f", getTotal(&models.Carts))
 	fmt.Print("\n----------------------------------------------------\n\n")
 	return true
 }
