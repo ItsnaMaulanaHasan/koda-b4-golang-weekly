@@ -2,14 +2,10 @@ package menu
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"golang-weekly/internal/models"
 	"golang-weekly/internal/utils"
-	"os"
 	"text/tabwriter"
-
-	"github.com/jackc/pgx/v5"
 )
 
 // func getDataMenu(tempFilePath *string) {
@@ -102,19 +98,6 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 		}
 	}()
 	// cachingDataMenu()
-	conn, err := utils.GetConn()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-	}
-	defer conn.Close(context.Background())
-
-	rows, _ := conn.Query(context.Background(), "SELECT id, name, price FROM products")
-	products, err := pgx.CollectRows(rows, pgx.RowToStructByName[models.Menu])
-	if err != nil {
-		panic(err)
-	}
-	models.Menus = products
 	loop := true
 	for loop {
 		func() {
