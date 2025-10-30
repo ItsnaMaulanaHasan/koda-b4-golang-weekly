@@ -109,14 +109,18 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 	}
 	defer conn.Close(context.Background())
 
-	rows, err := conn.Query(context.Background(), "SELECT id, name, price FROM products")
+	ctx := context.Background()
+
+	rows, err := conn.Query(ctx, "SELECT id, name, price FROM products")
 	if err != nil {
 		panic(err)
 	}
 	models.Menus, err = pgx.CollectRows(rows, pgx.RowToStructByName[models.Menu])
+	rows.Close()
 	if err != nil {
 		panic(err)
 	}
+
 	loop := true
 	for loop {
 		func() {
@@ -159,23 +163,23 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 				if item.ID == choice {
 					fmt.Println("\nYou selected:", item.Name)
 					found = true
-					itemExists := false
-					for i := range models.Carts {
-						if models.Carts[i].ID == item.ID {
-							models.Carts[i].Quantity++
-							itemExists = true
-							break
+
+					result, err := conn.Exec(ctx,
+						`UPDATE carts SET quantity = quantity + 1 WHERE product_id = $1`,
+						item.ID)
+					if err != nil {
+						panic(fmt.Sprintf("Unable to update cart: %v", err))
+					}
+
+					if result.RowsAffected() == 0 {
+						_, err := conn.Exec(ctx,
+							`INSERT INTO carts (product_id, quantity) VALUES ($1, $2)`,
+							item.ID, 1)
+						if err != nil {
+							panic(fmt.Sprintf("Unable to insert into cart: %v", err))
 						}
 					}
 
-					if !itemExists {
-						models.Carts = append(models.Carts, models.Cart{
-							ID:       item.ID,
-							Name:     item.Name,
-							Quantity: 1,
-							Price:    item.Price,
-						})
-					}
 					fmt.Printf("%s has been added to your cart.\n", item.Name)
 				}
 			}
