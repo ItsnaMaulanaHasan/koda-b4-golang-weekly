@@ -2,80 +2,95 @@ package menu
 
 import (
 	"bufio"
-	"encoding/json"
+	"context"
 	"fmt"
 	"golang-weekly/internal/models"
 	"golang-weekly/internal/utils"
 	"os"
-	"path/filepath"
-	"strconv"
 	"text/tabwriter"
-	"time"
+
+	"github.com/jackc/pgx/v5"
 )
 
-func getDataMenu(tempFilePath *string) {
-	// get data menu
-	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
+// func getDataMenu(tempFilePath *string) {
+// 	// get data menu
+// 	dataMenu := utils.GetData("https://raw.githubusercontent.com/ItsnaMaulanaHasan/koda-b4-golang-weekly-data/refs/heads/main/data.json")
 
-	// unmarshall dataMenu ke dalam bentu slice of struct
-	err := json.Unmarshal(dataMenu, &models.Menus)
-	if err != nil {
-		panic(err)
-	}
+// 	// unmarshall dataMenu ke dalam bentu slice of struct
+// 	err := json.Unmarshal(dataMenu, &models.Menus)
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	// membuat file temp dan mengisinya dengan dataMenu
-	err = os.WriteFile(*tempFilePath, dataMenu, 0666)
-	if err != nil {
-		panic(err)
-	}
-}
+// 	// membuat file temp dan mengisinya dengan dataMenu
+// 	err = os.WriteFile(*tempFilePath, dataMenu, 0666)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
-func cachingDataMenu() {
-	tempPath := os.TempDir()
+// func cachingDataMenu() {
+// 	tempPath := os.TempDir()
 
-	// membuat directory file temp
-	mixuePosDir := filepath.Join(tempPath, "mixue-pos")
-	err := os.MkdirAll(mixuePosDir, 0755)
-	if err != nil {
-		panic(err)
-	}
+// 	// membuat directory file temp
+// 	mixuePosDir := filepath.Join(tempPath, "mixue-pos")
+// 	err := os.MkdirAll(mixuePosDir, 0755)
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	tempFilePath := filepath.Join(mixuePosDir, "menu.json")
+// 	tempFilePath := filepath.Join(mixuePosDir, "menu.json")
 
-	// cek apakah file Temp ada
-	fileTemp, err := os.Stat(tempFilePath)
-	if os.IsNotExist(err) {
-		// jika file tidak ada maka:
-		getDataMenu(&tempFilePath)
-	} else if err != nil {
-		// jika ada error yang lain
-		panic(err)
-	} else {
-		// jika file temp sudah ada
-		modTimeFile := fileTemp.ModTime()
-		currentTime := time.Now()
-		duration := currentTime.Sub(modTimeFile)
-		duration_time, _ := strconv.Atoi(utils.LoadDefaultEnv("DURATION_CACHE", "3600"))
-		targetDuration := time.Duration(duration_time) * time.Second
+// 	// cek apakah file Temp ada
+// 	fileTemp, err := os.Stat(tempFilePath)
+// 	if os.IsNotExist(err) {
+// 		// jika file tidak ada maka:
+// 		getDataMenu(&tempFilePath)
+// 	} else if err != nil {
+// 		// jika ada error yang lain
+// 		panic(err)
+// 	} else {
+// 		// jika file temp sudah ada
+// 		modTimeFile := fileTemp.ModTime()
+// 		currentTime := time.Now()
+// 		duration := currentTime.Sub(modTimeFile)
+// 		duration_time, _ := strconv.Atoi(utils.LoadDefaultEnv("DURATION_CACHE", "3600"))
+// 		targetDuration := time.Duration(duration_time) * time.Second
 
-		if duration >= targetDuration {
-			// jika waktu sudah melebihi 15 detik maka:
-			getDataMenu(&tempFilePath)
-		} else {
-			// membaca isi file temp
-			fileData, err := os.ReadFile(tempFilePath)
-			if err != nil {
-				panic(err)
-			}
+// 		if duration >= targetDuration {
+// 			// jika waktu sudah melebihi 15 detik maka:
+// 			getDataMenu(&tempFilePath)
+// 		} else {
+// 			// membaca isi file temp
+// 			fileData, err := os.ReadFile(tempFilePath)
+// 			if err != nil {
+// 				panic(err)
+// 			}
 
-			// unmarshall isi file temp ke dalam bentuk slice of struct
-			err = json.Unmarshal(fileData, &models.Menus)
-			if err != nil {
-				panic(err)
-			}
-		}
-	}
-}
+// 			// unmarshall isi file temp ke dalam bentuk slice of struct
+// 			err = json.Unmarshal(fileData, &models.Menus)
+// 			if err != nil {
+// 				panic(err)
+// 			}
+// 		}
+// 	}
+// }
+
+// func getDataMenu() {
+// 	conn, err := utils.GetConn()
+// 	if err != nil {
+// 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+// 		os.Exit(1)
+// 	}
+// 	defer conn.Close(context.Background())
+
+// 	rows, _ := conn.Query(context.Background(), "SELECT id, name, price FROM products")
+// 	products, err := pgx.CollectRows(rows, pgx.RowToStructByName[models.Menu])
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	models.Menus = products
+// }
 
 func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
 	defer func() {
@@ -86,7 +101,20 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 			scanner.Scan()
 		}
 	}()
-	cachingDataMenu()
+	// cachingDataMenu()
+	conn, err := utils.GetConn()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer conn.Close(context.Background())
+
+	rows, _ := conn.Query(context.Background(), "SELECT id, name, price FROM products")
+	products, err := pgx.CollectRows(rows, pgx.RowToStructByName[models.Menu])
+	if err != nil {
+		panic(err)
+	}
+	models.Menus = products
 	loop := true
 	for loop {
 		func() {
