@@ -2,6 +2,51 @@
 
 A command-line Point of Sale (POS) application for Mixue drink orders, demonstrating key Go concepts including pointers, interfaces, goroutines, and concurrent processing. Features cart management, automatic invoice generation, transaction history, and real-time loading animations during checkout.
 
+## ERD Mixue Pos Application
+
+```mermaid
+erDiagram
+    products {
+        serial id
+        varchar(100) name
+        numeric price
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    carts {
+        serial id
+        int product_id
+        int quantity
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    carts }|--|| products : own
+
+    histories {
+        serial id
+        timestamp date
+        varchar(20) no_invoice
+        int product_cart_id
+        numeric total
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    product_history {
+        serial id
+        int historiy_id
+        int product_id
+        int quantity
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    histories ||--|{ product_history : own
+    products ||--|{ product_history : own
+```
+
 ## Tech Stack
 
 - **Go** 1.22+ - Programming language
