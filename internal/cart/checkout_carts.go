@@ -64,7 +64,6 @@ func CheckoutCart(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Wri
 
 				time.Sleep(200 * time.Millisecond)
 
-				models.Carts = []models.Cart{}
 				fmt.Print("Checkout successful! Press enter to continue... ")
 				scanner.Scan()
 				loop = false

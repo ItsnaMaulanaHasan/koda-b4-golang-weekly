@@ -2,10 +2,14 @@ package cart
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"golang-weekly/internal/models"
 	"golang-weekly/internal/utils"
+	"os"
 	"text/tabwriter"
+
+	"github.com/jackc/pgx/v5"
 )
 
 var CartMenus = []models.MenusPage{
@@ -15,6 +19,22 @@ var CartMenus = []models.MenusPage{
 }
 
 func printCarts(scanner *bufio.Scanner, w *tabwriter.Writer) bool {
+	conn, err := utils.GetConn()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer conn.Close(context.Background())
+
+	rows, err := conn.Query(context.Background(), "SELECT carts.id, carts.product_id, products.name, carts.quantity, products.price FROM carts JOIN products ON products.id = carts.product_id")
+	if err != nil {
+		panic(err)
+	}
+	models.Carts, err = pgx.CollectRows(rows, pgx.RowToStructByName[models.Cart])
+	if err != nil {
+		panic(err)
+	}
+
 	fmt.Print("----------------- Your Carts -----------------------\n\n")
 	if len(models.Carts) == 0 {
 		fmt.Print("Your carts is empty.\n\n")

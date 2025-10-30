@@ -17,15 +17,11 @@ func getTotal(menuItems *[]models.Cart) float64 {
 }
 
 func createInvoice(menuItems *[]models.Cart) models.History {
-	ID := rand.IntN(9000) + 1000
-	invoice := fmt.Sprintf("INV-MIXUE-%v", ID)
-
+	invoice := fmt.Sprintf("INV-MIXUE-%v", rand.IntN(9000)+1000)
 	dateNow := time.Now()
-	dateStr := dateNow.Format("01-02-2006")
 
 	dataHistory := models.History{
-		ID:        ID,
-		Date:      dateStr,
+		Date:      dateNow,
 		NoInvoice: invoice,
 		ListMenu:  *menuItems,
 		Total:     getTotal(menuItems),
