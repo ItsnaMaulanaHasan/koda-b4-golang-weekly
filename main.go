@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"golang-weekly/internal/cart"
 	"golang-weekly/internal/history"
@@ -11,8 +10,6 @@ import (
 	"golang-weekly/internal/utils"
 	"os"
 	"text/tabwriter"
-
-	"github.com/jackc/pgx/v5"
 )
 
 var HomeMenus = []models.MenusPage{
@@ -29,20 +26,6 @@ func main() {
 		fmt.Println("\nExiting program")
 		os.Exit(0)
 	}()
-
-	conn, err := utils.GetConn()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-	}
-	defer conn.Close(context.Background())
-
-	rows, _ := conn.Query(context.Background(), "SELECT id, name, price FROM products")
-	models.Menus, err = pgx.CollectRows(rows, pgx.RowToStructByName[models.Menu])
-	if err != nil {
-		panic(err)
-	}
-
 	loop := true
 	reader := bufio.NewReader(os.Stdin)
 	scanner := bufio.NewScanner(os.Stdin)
