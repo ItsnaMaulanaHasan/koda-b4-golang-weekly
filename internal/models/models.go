@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"text/tabwriter"
+	"time"
 )
 
 type Menu struct {
@@ -21,17 +22,18 @@ type MenusPage struct {
 }
 
 type Cart struct {
-	ID       int
-	Name     string
-	Quantity int
-	Price    float64
+	ID         int
+	Product_id int
+	Name       string
+	Quantity   int
+	Price      float64
 }
 
 var Carts = []Cart{}
 
 type History struct {
 	ID        int
-	Date      string
+	Date      time.Time
 	NoInvoice string
 	ListMenu  []Cart
 	Total     float64
