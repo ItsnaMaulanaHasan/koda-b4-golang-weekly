@@ -138,7 +138,7 @@ func SelectMenu(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Write
 			fmt.Print("-----------------------------------------------\n")
 
 			fmt.Print("\n0. Back to Home\n")
-			fmt.Printf("\nDuration cache: %vs\n", utils.LoadDefaultEnv("DURATION_CACHE", "3600"))
+			// fmt.Printf("\nDuration cache: %vs\n", utils.LoadDefaultEnv("DURATION_CACHE", "3600"))
 			fmt.Print("\nChoose a menu: ")
 
 			choice, err := utils.InputInt(reader)
