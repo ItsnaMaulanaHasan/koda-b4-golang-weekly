@@ -28,7 +28,6 @@ erDiagram
         serial id
         timestamp date
         varchar(20) no_invoice
-        int product_cart_id
         numeric total
         timestamp created_at
         timestamp updated_at
