@@ -7,10 +7,11 @@ import (
 )
 
 func DetailsHistory(index int, scanner *bufio.Scanner) {
+	formattedDate := models.Histories[index].Date.Format("02-01-2006")
 	fmt.Println("\x1bc")
 	history := models.Histories[index]
 	fmt.Println("--- History Details ---")
-	fmt.Println("Date:", history.Date)
+	fmt.Println("Date:", formattedDate)
 	fmt.Println("No Invoice:", history.NoInvoice)
 	fmt.Println("\nMenu Items:")
 	for _, menu := range history.ListMenu {

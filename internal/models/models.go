@@ -32,11 +32,11 @@ type Cart struct {
 var Carts = []Cart{}
 
 type History struct {
-	ID        int
-	Date      time.Time
-	NoInvoice string
-	ListMenu  []Cart
-	Total     float64
+	ID        int       `db:"id"`
+	Date      time.Time `db:"date"`
+	NoInvoice string    `db:"no_invoice"`
+	Total     float64   `db:"total"`
+	ListMenu  []Cart    `db:"-"`
 }
 
 var Histories = []History{}
@@ -55,7 +55,8 @@ func (cart *Cart) PrintOut(w *tabwriter.Writer) {
 
 func (history *History) PrintOut(w *tabwriter.Writer) {
 	for i, item := range Histories {
-		fmt.Fprintf(w, "%d\t%s\t%s\tRp.%.2f\n", i+1, item.Date, item.NoInvoice, item.Total)
+		formattedDate := item.Date.Format("02-01-2006")
+		fmt.Fprintf(w, "%d\t%s\t%s\tRp.%.2f\n", i+1, formattedDate, item.NoInvoice, item.Total)
 	}
 }
 

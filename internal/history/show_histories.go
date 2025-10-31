@@ -2,13 +2,66 @@ package history
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"golang-weekly/internal/models"
 	"golang-weekly/internal/utils"
+	"os"
 	"text/tabwriter"
+
+	"github.com/jackc/pgx/v5"
 )
 
 func ShowHistories(reader *bufio.Reader, scanner *bufio.Scanner, w *tabwriter.Writer) {
+	conn, err := utils.GetConn()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer conn.Close(context.Background())
+
+	ctx := context.Background()
+
+	rows, err := conn.Query(ctx, "SELECT id, date, no_invoice, total FROM histories ORDER BY date DESC")
+	if err != nil {
+		panic(fmt.Sprintf("Query histories failed: %v", err))
+	}
+
+	histories, err := pgx.CollectRows(rows, pgx.RowToStructByName[models.History])
+	rows.Close()
+	if err != nil {
+		panic(fmt.Sprintf("Failed to collect histories: %v", err))
+	}
+
+	fmt.Println(histories)
+
+	for i := range histories {
+		detailRows, err := conn.Query(ctx, `
+			SELECT
+				product_history.id,
+				product_history.product_id,
+				products.name,
+				product_history.quantity,
+				products.price
+			FROM product_history
+			JOIN products ON products.id = product_history.product_id
+			WHERE product_history.history_id = $1
+		`, histories[i].ID)
+
+		if err != nil {
+			panic(fmt.Sprintf("Query product_history failed: %v", err))
+		}
+
+		carts, err := pgx.CollectRows(detailRows, pgx.RowToStructByName[models.Cart])
+		detailRows.Close()
+		if err != nil {
+			panic(fmt.Sprintf("Failed to collect carts: %v", err))
+		}
+
+		histories[i].ListMenu = carts
+	}
+
+	models.Histories = histories
 	loop := true
 	for loop {
 		func() {
